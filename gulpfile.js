@@ -1,5 +1,8 @@
 const gulp = require('gulp');
 
+const lintHTML = require('gulp-htmllint');
+const lintCSS = require('gulp-stylelint');
+const lintJS = require('gulp-eslint');
 const deleteFiles = require('gulp-rimraf');
 const minifyHTML = require('gulp-minify-html');
 const minifyCSS = require('gulp-clean-css');
@@ -7,96 +10,96 @@ const minifyJS = require('gulp-uglify');
 const concat = require('gulp-concat');
 const rename = require('gulp-rename');
 const replaceHTML = require('gulp-html-replace');
-const ignore = require('gulp-ignore');
 const zip = require('gulp-zip');
 const checkFileSize = require('gulp-check-filesize');
-const serve = require('gulp-connect');
-const opn = require('opn');
 
-const sourcePaths = {
+const srcPaths = {
     html: 'src/index.html',
-    css: 'src/css/style.css',
-    js: 'src/js/script.js'
+    css: 'src/css/*.css',
+    js: 'src/js/*.js'
 };
 
 const distPaths = {
-    build: 'dist',
-    minifiedCSS: 'style.min.css',
-    minifiedJS: 'script.min.js'
+    dir: 'dist',
+    css: 'style.min.css',
+    js: 'script.min.js'
 };
 
-const server = {
-    dir: './src',
-    port: '5000'
-};
+gulp.task('lintHTML', () => {
+    return gulp.src('src/index.html')
+        .pipe(lintHTML());
+});
+
+gulp.task('lintCSS', () => {
+    return gulp.src(srcPaths.css)
+        .pipe(lintCSS({
+            reporters: [{ formatter: 'string', console: true }]
+        }));
+});
+
+gulp.task('lintJS', () => {
+    return gulp.src(srcPaths.js)
+        .pipe(lintJS())
+        .pipe(lintJS.failAfterError());
+});
 
 gulp.task('cleanDist', () => {
-    return gulp.src('./dist/*', { read: false })
-        .pipe(ignore('.gitignore'))
+    return gulp.src('dist/*', { read: false })
         .pipe(deleteFiles());
 });
 
 gulp.task('buildHTML', () => {
-    return gulp.src(sourcePaths.html)
+    return gulp.src(srcPaths.html)
         .pipe(replaceHTML({
-            css: distPaths.minifiedCSS,
-            js: distPaths.minifiedJS
+            css: distPaths.css,
+            js: distPaths.js
         }))
         .pipe(minifyHTML())
         .pipe(rename('index.html'))
-        .pipe(gulp.dest(distPaths.build));
+        .pipe(gulp.dest(distPaths.dir));
 });
 
 gulp.task('buildCSS', () => {
-    return gulp.src(sourcePaths.css)
-        .pipe(concat(distPaths.minifiedCSS))
+    return gulp.src(srcPaths.css)
+        .pipe(concat(distPaths.css))
         .pipe(minifyCSS())
-        .pipe(gulp.dest(distPaths.build));
+        .pipe(gulp.dest(distPaths.dir));
 });
 
 gulp.task('buildJS', () => {
-    return gulp.src(sourcePaths.js)
-        .pipe(concat(distPaths.minifiedJS))
+    return gulp.src(srcPaths.js)
+        .pipe(concat(distPaths.js))
         .pipe(minifyJS())
-        .pipe(gulp.dest(distPaths.build));
+        .pipe(gulp.dest(distPaths.dir));
 });
 
 gulp.task('zip', () => {
-    return gulp.src('./dist/*')
+    const thirteenKb = 13 * 1024;
+
+    gulp.src('zip/*')
+        .pipe(deleteFiles());
+
+    return gulp.src('dist/*')
         .pipe(zip('game.zip'))
-        .pipe(gulp.dest('./zip'))
-        .pipe(checkFileSize({ fileSizeLimit: 13312 }));
-});
-
-gulp.task('serve', () => {
-    return gulp.src(server.dir)
-        .pipe(serve({
-            port: server.port,
-            fallback: 'index.html'
-        }));
-});
-
-gulp.task('openBrowser', () => {
-    opn(`http://localhost:${server.port}`);
-});
-
-gulp.task('watch', () => {
-    gulp.watch(sourcePaths.css, gulp.series('buildCSS', 'zip'));
-    gulp.watch(sourcePaths.js, gulp.series('buildJS', 'zip'));
-    gulp.watch(sourcePaths.html, gulp.series('buildHTML', 'zip'));
+        .pipe(gulp.dest('zip'))
+        .pipe(checkFileSize({ fileSizeLimit: thirteenKb }));
 });
 
 gulp.task('build', gulp.series(
     'cleanDist',
-    'buildJS',
-    'buildCSS',
-    'buildHTML',
+    gulp.parallel('buildHTML', 'buildCSS', 'buildJS'),
     'zip'
 ));
 
+gulp.task('watch', () => {
+    gulp.watch(srcPaths.html, gulp.series('buildHTML', 'zip'));
+    gulp.watch(srcPaths.css, gulp.series('buildCSS', 'zip'));
+    gulp.watch(srcPaths.js, gulp.series('buildJS', 'zip'));
+});
+
+gulp.task('test', gulp.parallel('lintHTML', 'lintCSS', 'lintJS'));
+
 gulp.task('default', gulp.series(
     'build',
-    'serve',
-    'openBrowser',
     'watch'
 ));
