@@ -10,19 +10,23 @@ const minifyJS = require('gulp-uglify');
 const concat = require('gulp-concat');
 const rename = require('gulp-rename');
 const replaceHTML = require('gulp-html-replace');
+const imagemin = require('gulp-imagemin');
 const zip = require('gulp-zip');
 const checkFileSize = require('gulp-check-filesize');
 
-const srcPaths = {
-    html: 'src/index.html',
-    css: 'src/css/*.css',
-    js: 'src/js/*.js'
-};
-
-const distPaths = {
-    dir: 'dist',
-    css: 'style.min.css',
-    js: 'script.min.js'
+const paths = {
+    src: {
+        html: 'src/index.html',
+        css: 'src/css/*.css',
+        js: 'src/js/*.js',
+        images: 'src/images/*'
+    },
+    dist: {
+        dir: 'dist',
+        css: 'style.min.css',
+        js: 'script.min.js',
+        images: 'dist/images'
+    }
 };
 
 gulp.task('lintHTML', () => {
@@ -31,14 +35,14 @@ gulp.task('lintHTML', () => {
 });
 
 gulp.task('lintCSS', () => {
-    return gulp.src(srcPaths.css)
+    return gulp.src(paths.src.css)
         .pipe(lintCSS({
             reporters: [{ formatter: 'string', console: true }]
         }));
 });
 
 gulp.task('lintJS', () => {
-    return gulp.src(srcPaths.js)
+    return gulp.src(paths.src.js)
         .pipe(lintJS())
         .pipe(lintJS.failAfterError());
 });
@@ -49,28 +53,34 @@ gulp.task('cleanDist', () => {
 });
 
 gulp.task('buildHTML', () => {
-    return gulp.src(srcPaths.html)
+    return gulp.src(paths.src.html)
         .pipe(replaceHTML({
-            css: distPaths.css,
-            js: distPaths.js
+            css: paths.dist.css,
+            js: paths.dist.js
         }))
         .pipe(minifyHTML())
         .pipe(rename('index.html'))
-        .pipe(gulp.dest(distPaths.dir));
+        .pipe(gulp.dest(paths.dist.dir));
 });
 
 gulp.task('buildCSS', () => {
-    return gulp.src(srcPaths.css)
-        .pipe(concat(distPaths.css))
+    return gulp.src(paths.src.css)
+        .pipe(concat(paths.dist.css))
         .pipe(minifyCSS())
-        .pipe(gulp.dest(distPaths.dir));
+        .pipe(gulp.dest(paths.dist.dir));
 });
 
 gulp.task('buildJS', () => {
-    return gulp.src(srcPaths.js)
-        .pipe(concat(distPaths.js))
+    return gulp.src(paths.src.js)
+        .pipe(concat(paths.dist.js))
         .pipe(minifyJS())
-        .pipe(gulp.dest(distPaths.dir));
+        .pipe(gulp.dest(paths.dist.dir));
+});
+
+gulp.task('optimizeImages', () => {
+    return gulp.src(paths.src.images)
+        .pipe(imagemin())
+        .pipe(gulp.dest(paths.dist.images));
 });
 
 gulp.task('zip', () => {
@@ -79,25 +89,30 @@ gulp.task('zip', () => {
     gulp.src('zip/*')
         .pipe(deleteFiles());
 
-    return gulp.src('dist/*')
+    return gulp.src(`${paths.dist.dir}/**`)
         .pipe(zip('game.zip'))
         .pipe(gulp.dest('zip'))
         .pipe(checkFileSize({ fileSizeLimit: thirteenKb }));
 });
 
+gulp.task('test', gulp.parallel(
+    'lintHTML',
+    'lintCSS',
+    'lintJS'
+));
+
 gulp.task('build', gulp.series(
     'cleanDist',
-    gulp.parallel('buildHTML', 'buildCSS', 'buildJS'),
+    gulp.parallel('buildHTML', 'buildCSS', 'buildJS', 'optimizeImages'),
     'zip'
 ));
 
 gulp.task('watch', () => {
-    gulp.watch(srcPaths.html, gulp.series('buildHTML', 'zip'));
-    gulp.watch(srcPaths.css, gulp.series('buildCSS', 'zip'));
-    gulp.watch(srcPaths.js, gulp.series('buildJS', 'zip'));
+    gulp.watch(paths.src.html, gulp.series('buildHTML', 'zip'));
+    gulp.watch(paths.src.css, gulp.series('buildCSS', 'zip'));
+    gulp.watch(paths.src.js, gulp.series('buildJS', 'zip'));
+    gulp.watch(paths.src.images, gulp.series('optimizeImages', 'zip'));
 });
-
-gulp.task('test', gulp.parallel('lintHTML', 'lintCSS', 'lintJS'));
 
 gulp.task('default', gulp.series(
     'build',

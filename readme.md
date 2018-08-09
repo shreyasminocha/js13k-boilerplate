@@ -33,7 +33,8 @@ npm install # install devDependencies
     - Concatenate CSS files (`src/css/*.css`)
     - Concatenate JS files (`src/js/*.js`)
     - Minify HTML, CSS and JS to `dist/index.html`, `dist/style.min.css` and `dist/script.min.js` respectively
-    - Fix links to CSS and JS files in `dist/index.html`
+    - Correct links to CSS and JS files in `dist/index.html`
+    - Optimize images in `src/images` using [gifsicle](https://github.com/imagemin/imagemin-gifsicle), [jpegtran](https://github.com/imagemin/imagemin-jpegtran), [optipng](https://github.com/imagemin/imagemin-optipng), [svgo](https://github.com/imagemin/imagemin-svgo) and place them in `dist/images`.
     - Compress `dist` to `zip/game.zip`
     - Warn if `zip/game.zip` is larger than 13kb
 - `gulp test` / `npm test`
