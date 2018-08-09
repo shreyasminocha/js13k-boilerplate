@@ -1,6 +1,6 @@
 # JS13kGames Boilerplate
 
-Boilerplate for [JS13kGames](https://js13kgames.com) projects. Based off [js13k-starter](https://github.com/aymanfarhat/js13k-starter).
+Boilerplate for [JS13kGames](https://js13kgames.com) projects. Fork of [js13k-starter](https://github.com/aymanfarhat/js13k-starter).
 
 This is what works for me; it might work for you, but it might not. Feel free to modify this to fit your needs.
 
@@ -24,6 +24,7 @@ Clone this project and change the remote.
 ```sh
 git clone https://github.com/shreyasminocha/JS13kGames-boilerplate
 git remote set-url origin [YOUR GITHUB REPO]
+npm install # install devDependencies
 ```
 
 ## Usage
