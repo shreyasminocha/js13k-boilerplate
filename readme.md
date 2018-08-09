@@ -7,11 +7,11 @@ This is what works for me; it might work for you, but it might not. Feel free to
 ## Features
 
 - Gulp build process
-    - `gulp-minify-html` for HTML minification
-    - `gulp-clean-css` for CSS minification
-    - `gulp-eslint` for JS minification
-    - Zip generation
-    - Warn on zip file size greater than 13kb.
+    - [`gulp-minify-html`](https://npmjs.com/package/gulp-minify-html) for HTML minification
+    - [`gulp-clean-css`](https://npmjs.com/package/gulp-clean-css) for CSS minification
+    - [`gulp-eslint`](https://npmjs.com/package/gulp-eslint) for JS minification
+    - `.zip` file generation
+    - Warn on `.zip` file size greater than 13kb.
 - Gulp tests
     - [`htmllint`](https://htmllint.github.io) for HTML
     - [`stylelint`](https://stylelint.io) for CSS
@@ -52,7 +52,7 @@ cd dist
 hotel add --name "game" 'http-server -p "$PORT" -c-1'
 ```
 
-Since I've set up `.localhost` domains for hotel apps, I can access the game at `game.localhost`.
+Since I've set up `.localhost` domains for hotel apps, I would be able to access the game at `game.localhost`.
 
 You might prefer running a server through gulp. Feel free to modify `gulpfile.js` in your clone to fit your needs.
 
