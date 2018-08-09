@@ -19,12 +19,19 @@ This is what works for me; it might work for you, but it might not. Feel free to
 
 ## Installation
 
-Clone this project and change the remote.
+Clone this project, change the remote, install dev dependencies using [npm](https://npmjs.com).
 
 ```sh
-git clone https://github.com/shreyasminocha/JS13kGames-boilerplate
+git clone https://github.com/shreyasminocha/js13k-boilerplate
+
+mv js13k-boilerplate [NAME OF YOUR GAME]
+cd [NAME OF YOUR GAME]
+
 git remote set-url origin [YOUR GITHUB REPO]
 npm install # install devDependencies
+
+rm readme.md
+$EDITOR package.json # change package details
 ```
 
 ## Usage
