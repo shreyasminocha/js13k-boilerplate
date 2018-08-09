@@ -1,7 +1,7 @@
 {
-  "name": "",
-  "version": "",
-  "description": "",
+  "name": "js13k-boilerplate",
+  "version": "1.0.0",
+  "description": "A boilerplate for JS13kGames projects",
   "main": "index.html",
   "scripts": {
     "test": "gulp test",
@@ -9,7 +9,7 @@
     "watch": "gulp"
   },
   "author": "Shreyas Minocha",
-  "license": "",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "gulp": "^4.0.0",
