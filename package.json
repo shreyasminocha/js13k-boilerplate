@@ -2,7 +2,6 @@
   "name": "js13k-boilerplate",
   "version": "1.0.0",
   "description": "A boilerplate for JS13kGames projects",
-  "main": "index.html",
   "scripts": {
     "test": "gulp test",
     "build": "gulp build",
@@ -24,10 +23,24 @@
     "gulp-rename": "^1.4.0",
     "gulp-rimraf": "^0.2.2",
     "gulp-stylelint": "^7.0.0",
-    "gulp-uglify": "^3.0.1",
+    "gulp-uglify-es": "^1.0.4",
     "gulp-zip": "^4.2.0",
     "stylelint": "^9.4.0",
     "stylelint-config-standard": "^18.2.0",
     "tunnel-agent": "^0.6.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shreyasminocha/js13k-boilerplate.git"
+  },
+  "keywords": [
+    "js13k",
+    "boilerplate",
+    "gulp",
+    "workflow"
+  ],
+  "bugs": {
+    "url": "https://github.com/shreyasminocha/js13k-boilerplate/issues"
+  },
+  "homepage": "https://github.com/shreyasminocha/js13k-boilerplate#readme"
 }
