@@ -9,7 +9,7 @@ This is what works for me; it might work for you, but it might not. Feel free to
 - Gulp build process
     - [`gulp-minify-html`](https://npmjs.com/package/gulp-minify-html) for HTML minification
     - [`gulp-clean-css`](https://npmjs.com/package/gulp-clean-css) for CSS minification
-    - [`gulp-uglify-es`](https://npmjs.com/package/gulp-uglify-es) for JS minification
+    - [`gulp-terser`](https://npmjs.com/package/gulp-terser) for JS minification
     - `.zip` file generation
     - Warn on `.zip` file size greater than 13kb.
 - Gulp tests
