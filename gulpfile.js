@@ -16,7 +16,7 @@ const checkFileSize = require('gulp-check-filesize');
 
 const paths = {
     src: {
-        html: 'src/index.html',
+        html: 'src/**.html',
         css: 'src/css/**.css',
         js: 'src/js/**.js',
         images: 'src/images/**'
@@ -30,7 +30,7 @@ const paths = {
 };
 
 gulp.task('lintHTML', () => {
-    return gulp.src('src/index.html')
+    return gulp.src('src/**.html')
         .pipe(lintHTML());
 });
 
@@ -59,7 +59,7 @@ gulp.task('buildHTML', () => {
             js: paths.dist.js
         }))
         .pipe(minifyHTML())
-        .pipe(rename('index.html'))
+//        .pipe(rename('index.html'))
         .pipe(gulp.dest(paths.dist.dir));
 });
 
