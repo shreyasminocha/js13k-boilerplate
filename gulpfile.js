@@ -17,9 +17,9 @@ const checkFileSize = require('gulp-check-filesize');
 const paths = {
     src: {
         html: 'src/index.html',
-        css: 'src/css/*.css',
-        js: 'src/js/*.js',
-        images: 'src/images/*'
+        css: 'src/css/**.css',
+        js: 'src/js/**.js',
+        images: 'src/images/**'
     },
     dist: {
         dir: 'dist',
