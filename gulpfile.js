@@ -59,7 +59,6 @@ gulp.task('buildHTML', () => {
             js: paths.dist.js
         }))
         .pipe(minifyHTML())
-//        .pipe(rename('index.html'))
         .pipe(gulp.dest(paths.dist.dir));
 });
 
